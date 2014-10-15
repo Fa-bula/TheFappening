@@ -27,11 +27,11 @@ def feedback():
 
 @app.route("/feedback/", methods=["POST"])
 def post_feedback():
-    f=open("static/txt/opinions", "a")
+    f=open("/home/user/The_Fappening/static/txt/opinions", "a")
     post=request.form["opinion"]
     f.write(str(datetime.datetime.now())+"\n")
     f.write(post.encode('utf-8')+"\n")
-    return render_template("index.html")
+    return redirect(url_for('feedback'))
 
 @app.route("/about/" )
 def about():
