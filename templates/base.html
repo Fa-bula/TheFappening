@@ -35,6 +35,10 @@
                 border: 0;
                 z-index: 500;
             }
+
+            .label {
+                font-size: 120%;
+            }
         </style>
         <meta charset="utf-8" />
         <title>{% block title %}{% endblock %}</title>
@@ -49,7 +53,7 @@
             </div>
 
             <ul class="nav nav-pills nav-justified">
-                {% for ep, title in [('videos', 'Videos'), ('about', 'Thanks To'), ('faq', 'FAQ'), ('feedback', 'Feedback')] %}
+                {% for ep, title in [('videos', 'Videos'), ('about', 'Our Great Team'), ('faq', 'FAQ'), ('feedback', 'Feedback')] %}
                     <li class="{{ 'active' if request.url.endswith(url_for(ep)) }}"><a href="{{ url_for(ep) }}">{{ title }}</a></li>
                 {% endfor %}
             </ul>

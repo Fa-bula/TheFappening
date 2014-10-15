@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}Thanks To{% endblock %}
+{% block title %}Our Great Team{% endblock %}
 
 {% block body %}
-    <div class="well">
-        <p>Благодарности:</p>
-        <p>Zadr - дизайн, программирование</p>
-        <p>Imba - менторство</p>
-        <p>Guru - программирование</p>
-        <p>Niga - вдохновение</p>
-        <p>**** - PR</p>
-        <p>Cu2O - экспертиза</p>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Благодарности</h3>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item"><span class="label label-success">Zadr</span> &mdash; дизайн, программирование</li>
+            <li class="list-group-item"><span class="label label-success">Imba</span> &mdash; менторство</li>
+            <li class="list-group-item"><span class="label label-success">Guru</span> &mdash; программирование</li>
+            <li class="list-group-item"><span class="label label-success">Niga</span> &mdash; вдохновение</li>
+            <li class="list-group-item"><span class="label label-success">****</span> &mdash; PR</li>
+            <li class="list-group-item"><span class="label label-success">Cu2O</span> &mdash; экспертиза</li>
+        </ul>
     </div>
 {% endblock %}
