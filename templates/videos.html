@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Videos{% endblock %}
+
+{% block body %}
+    {% for video_name in videos %}
+        <p>
+            <a href="/videos/{{ video_name }}">{{ video_name[:-4] }}</a>
+        </p>
+    {% endfor %}
+{% endblock %}
