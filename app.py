@@ -41,8 +41,8 @@ def about():
 def playboy():
     return render_template("playboy.html")
 
-@app.route("/FAQ/")
-def FAQ():
+@app.route("/faq")
+def faq():
     return render_template("FAQ.html")
 
 @app.route("/videos/<name>")
