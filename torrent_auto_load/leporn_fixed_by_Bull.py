@@ -31,37 +31,40 @@ FREE_SPACE = float(get_free_space(""))/1024.0/1024.0/1024.0
 
 FREE_SPACE = 16.0
 import urllib
-f = urllib.urlopen("http://leporno.org/")
-s = f.read()
-n = s.find('''viewtopic.php?t=''')
+file_with_page = urllib.urlopen("http://leporno.org/")
+main_page = file_with_page.read()
+n = main_page.find('''viewtopic.php?t=''')
 l = n
 x = 0
+
+forbidden_words = ['.wmv', 'gay', '.flv', '.avi', '.mov', 'zoo', 'transsexual', 'shemale', 'grand']
+
 all_titles = set([])
-base = open("base.txt", 'a+')
+base = open("/home/user/The_Fappening/torrent_auto_load/base.txt", 'a+')
 for line in base:
     all_titles.add(line)
 space = 0.0
 if l < 0:
-	print s
+	print main_page
 while l >= 0:
     end_of_page_address = 17
-    while str.isdigit( s[n + end_of_page_address]):
+    while str.isdigit( main_page[n + end_of_page_address]):
         end_of_page_address += 1
-    print "http://leporno.org/" + s[n :n +end_of_page_address ]
-    f1 = urllib.urlopen("http://leporno.org/" + s[n :n +end_of_page_address ])
-    s1 = f1.read()
-    #print s1
     
-    n1 = s1.find("http://leporno.org/save")
+    file_with_child_page = urllib.urlopen("http://leporno.org/" + main_page[n :n +end_of_page_address ])
+    child_page = file_with_child_page.read()
+    #print child_page
+    
+    n1 = child_page.find("http://leporno.org/save")
     if n1 > 0:
         
     
-        title_begin = s1.find("<title>") + 7
-        title_end = s1.find("</title>")
+        title_begin = child_page.find("<title>") + 7
+        title_end = child_page.find("</title>")
         
-        title = s1[title_begin:title_end]
+        title = child_page[title_begin:title_end]
         
-        print "title:  ", title
+       
         left = 0
         right = 0
         openned_brackets = 0
@@ -87,41 +90,49 @@ while l >= 0:
         while (right < len(title) and not(title[right] in set([ "[", "{"]))):
             right += 1
             
-        
+        no_forbidden_words = True
+        for word in forbidden_words:
+            no_forbidden_words &= (child_page.find(word) < 0)
             
-        size_begin = s1.find("Размер")
-        while not str.isdigit(s1[size_begin ]):
+        size_begin = child_page.find("Размер")
+        while not str.isdigit(child_page[size_begin ]):
             size_begin += 1
-        size_end = s1[size_begin:].find("&nbsp;") + size_begin
-        if isfloat(s1[size_begin:size_end]):
-       
-            current_size =float(s1[size_begin :size_end])
-            print s1[size_end + 6]
-            if s1[size_end + 6] == "M":
+        size_end = child_page[size_begin:].find("&nbsp;") + size_begin
+        if isfloat(child_page[size_begin:size_end]):       
+            current_size =float(child_page[size_begin :size_end])
+            if child_page[size_end + 6] == "M":
                 current_size /= 1024.0
+                
+            print "http://leporno.org/" + main_page[n :n +end_of_page_address ]
+            print no_forbidden_words, (space + current_size <= FREE_SPACE), (child_page.find("MP4") > 0 or
+            child_page.find("MPEG4") > 0), (not (title[left:right] + '\n') in all_titles)
+      
+            if no_forbidden_words and (space + current_size <= FREE_SPACE) and (child_page.find("MP4") > 0 or
+            child_page.find("MPEG4") > 0) and (not (title[left:right] + '\n') in all_titles):
+                
+                print "title:  ", title
                 print "CS:", current_size
-            print (space + current_size <= FREE_SPACE) ,s1.find("MP4") > 0 , s1.find("MPEG4") > 0 ,(not title[left:right] + "\n" in all_titles)
-            
-            if (space + current_size <= FREE_SPACE) and (s1.find("MP4") > 0 or s1.find("MPEG4") > 0) and (not title[left:right] in all_titles):
-                name_begin = max(s1.find("В ролях"), s1.find("Имя актрисы"),s1.find("Актриса"))
-                start = s1[name_begin:].find(":")
-                end = s1[name_begin + start:].find("<")
-                f = open("./" + str(x) + ".txt", "w" )
+                
+                name_begin = max(child_page.find("В ролях"), child_page.find("Имя актрисы"),child_page.find("Актриса"))
+                start = child_page[name_begin:].find(":")
+                end = child_page[name_begin + start:].find("<")
+                f = open("/home/user/The_Fappening/torrent_auto_load/" + str(x) + ".txt", "w" )
                 f.write(title[left:right] + "\n")
                 if name_begin >= 0:
-                    f.write(s1[name_begin + start + 1 : name_begin + start + end])
+                    f.write(child_page[name_begin + start + 1 : name_begin + start + end])
                 f.close()
-                print "ref:", s1[n1:n1+37]
+                print "ref:", child_page[n1:n1+37]
                 
                 
-                urllib.urlretrieve(s1[n1:n1+37],"/home/user/porn-server/The.Fappening/torrent_auto_load/" + str(x) + ".torrent")
-                #urllib.urlretrieve(s1[n1:n1+37],"./" + str(x) + ".torrent")
+                urllib.urlretrieve(child_page[n1:n1+37],"/home/user/The_Fappening/torrent_auto_load/" + str(x) + ".torrent")
+                #urllib.urlretrieve(child_page[n1:n1+37],"./" + str(x) + ".torrent")
                 x = x + 1
                 all_titles.add(title[left:right] + "\n")
                 base.write(title[left:right] + "\n")
                 space += current_size
+                print "\n"
     
-    l = s[n+1:-1].find('''viewtopic.php?t=''')
+    l = main_page[n+1:-1].find('''viewtopic.php?t=''')
     n = l + n + 1
 base.close()
 

@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html>
- <head>
-  <meta charset="utf-8" />
-  <title>TODO</title>
- </head>
- <body>
-  <a download href="../static/txt/{{name}}">{{name}}</a>
- </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}{{ name }}{% endblock %}
+
+{% block body %}    
+    
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ name }}</h3>
+        </div>
+        <ul class="list-group">
+			{{ content }}
+        </ul>
+    </div>
+{% endblock %}

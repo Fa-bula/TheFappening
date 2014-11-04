@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+import markdown
+from flask import Markup
 from flask import Flask, render_template, request, redirect, url_for
 import datetime
 import os
@@ -29,8 +30,8 @@ def feedback():
 def post_feedback():
     f=open("/home/user/The_Fappening/static/txt/opinions", "a")
     post=request.form["opinion"]
-    f.write(str(datetime.datetime.now())+"\n")
-    f.write(post.encode('utf-8')+"\n")
+    f.write('1.  *' + str(datetime.datetime.now())[:-10]+"*\n")
+    f.write(">_"+post.encode('utf-8')+"_\n\n")
     return redirect(url_for('feedback'))
 
 @app.route("/about/" )
@@ -41,7 +42,7 @@ def about():
 def playboy():
     return render_template("playboy.html")
 
-@app.route("/faq")
+@app.route("/faq/")
 def faq():
     return render_template("FAQ.html")
 
@@ -52,11 +53,13 @@ def porn_video(name):
 @app.route("/images/<name>")
 def image(name):
     return render_template("image.html",name=name)
-
+    
 @app.route("/txt/<name>")
-def txt(name):
-    return render_template("txt.html",name=name)
-
+def text(name):
+	f=open('/home/user/The_Fappening/static/txt/' + name, 'r')
+	content=f.read()
+	content = Markup(markdown.markdown(content))
+	return render_template("txt.html", **locals())
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',port=8000, threaded=True, debug=False)
+    app.run(host='0.0.0.0',port=8000, threaded=True, debug=True)
