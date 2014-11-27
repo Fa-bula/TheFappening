@@ -55,7 +55,7 @@ while l >= 0:
     child_page = file_with_child_page.read()
     #print child_page
     
-    n1 = child_page.find("http://leporno.org/save")
+    n1 = child_page.find("save")
     if n1 > 0:
         
     
@@ -121,11 +121,11 @@ while l >= 0:
                 if name_begin >= 0:
                     f.write(child_page[name_begin + start + 1 : name_begin + start + end])
                 f.close()
-                print "ref:", child_page[n1:n1+37]
+                print "ref:","http://leporno.org/" + child_page[n1:n1+18]
                 
                 
-                urllib.urlretrieve(child_page[n1:n1+37],"/home/user/The_Fappening/torrent_auto_load/" + str(x) + ".torrent")
-                #urllib.urlretrieve(child_page[n1:n1+37],"./" + str(x) + ".torrent")
+                urllib.urlretrieve("http://leporno.org/" + child_page[n1:n1+18],"/home/user/The_Fappening/torrent_auto_load/" + str(x) + ".torrent")
+                #urllib.urlretrieve("http://leporno.org/" + child_page[n1:n1+18],"./" + str(x) + ".torrent")
                 x = x + 1
                 all_titles.add(title[left:right] + "\n")
                 base.write(title[left:right] + "\n")
@@ -136,4 +136,3 @@ while l >= 0:
     n = l + n + 1
 base.close()
 
-    

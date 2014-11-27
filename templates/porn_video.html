@@ -5,11 +5,11 @@
 {% block body %}
     <p>
         <video width="520" controls autoplay preload>
-            <source src="/video-files/{{name}}" type='video/{{video_type}}'>
+            <source src="/video-files/{{dir_}}/{{name}}" type='video/{{video_type}}'>
             Your browser does not support the video tag
         </video>
     </p>
     <p>
-        <a download href="/video-files/{{name}}">Скачать видео</a>
+        <a download href="/video-files/{{dir_}}/{{name}}">Скачать видео</a>
     </p>
 {% endblock %}

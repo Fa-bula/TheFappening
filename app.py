@@ -17,10 +17,15 @@ def index():
 @app.route("/videos/")
 def videos():
     root, dirs, files = os.walk('/home/user/The_Fappening/static/videos/').next()
-    mp4_files = filter(lambda x: x.endswith('.mp4'), files)
-    mov_files = filter(lambda x: x.endswith('.mov'), files)
-    ogg_files = filter(lambda x: x.endswith('.ogg'), files)
-    return render_template("videos.html", videos=mp4_files + mov_files + ogg_files)
+    mp4_files = []
+    mp4_files += filter(lambda x: x.endswith('.mp4'), files)
+    for dir_ in dirs:
+		root2, dirs2, files2 = os.walk(root + dir_ + '/').next()
+		mp4_files2 = filter(lambda x: x.endswith('.mp4'), files2)
+		for id, string in enumerate(mp4_files2):
+			mp4_files2[id] = dir_ + '/' + string
+		mp4_files += mp4_files2
+    return render_template("videos.html", videos=mp4_files)
 
 @app.route("/feedback/")
 def feedback():
@@ -47,8 +52,9 @@ def faq():
     return render_template("FAQ.html")
 
 @app.route("/videos/<name>")
-def porn_video(name):
-    return render_template("porn_video.html",video_type=name[-3:], name=name)
+@app.route("/videos/<dir_>/<name>")
+def porn_video(name, dir_=''):
+    return render_template("porn_video.html",video_type=name[-3:], name=name, dir_=dir_)
 
 @app.route("/images/<name>")
 def image(name):
